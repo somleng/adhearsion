@@ -22,7 +22,7 @@ module Adhearsion
     end
 
     def self.in_ahn_application?(path = '.')
-      Dir.chdir(path) { File.exists? SCRIPT_AHN }
+      Dir.chdir(path) { File.exist? SCRIPT_AHN }
     end
 
     def self.in_ahn_application_subdirectory?(path = Pathname.new(Dir.pwd))
