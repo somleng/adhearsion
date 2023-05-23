@@ -17,11 +17,6 @@ Before '@reconnect' do
   ENV['AHN_CORE_RECONNECT_ATTEMPTS'] = '100'
 end
 
-# TODO: check for name space / run issues
-After do
-  terminate_processes!
-end
-
 # Aruba upstream overwrites these variables so set them here until it is fixed.
 Aruba.configure do |config|
   config.before_cmd do |cmd|
@@ -29,20 +24,3 @@ Aruba.configure do |config|
     set_env('JAVA_OPTS', "#{ENV['JAVA_OPTS']} #{JAVA_OPTS_SAVED}")
   end
 end if RUBY_PLATFORM == 'java'
-
-# Profile slowest features
-# @see https://itshouldbeuseful.wordpress.com/2010/11/10/find-your-slowest-running-cucumber-features/
-scenario_times = {}
-Around() do |scenario, block|
-  start = Time.now
-  block.call
-  scenario_times["#{scenario.location.file}::#{scenario.name}"] = Time.now - start
-end
-at_exit do
-  max_scenarios = scenario_times.size > 30 ? 30 : scenario_times.size
-  puts "------------- Top #{max_scenarios} slowest scenarios -------------"
-  sorted_times = scenario_times.sort { |a, b| b[1] <=> a[1] }
-  sorted_times[0..max_scenarios - 1].each do |key, value|
-    puts "#{value.round(2)}  #{key}"
-  end
-end
