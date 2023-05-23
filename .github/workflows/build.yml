@@ -19,7 +19,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
@@ -29,7 +29,8 @@ jobs:
 
       - name: Run Specs
         run: |
-          bundle exec rake
+          bundle exec rspec spec
+          ruby -v | grep jruby || bundle exec cucumber features
 
       - name: Coveralls
         uses: coverallsapp/github-action@master
