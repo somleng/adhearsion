@@ -188,7 +188,7 @@ module Adhearsion
       private
 
       def send_ami_action(name, headers = {})
-        ami_client.send_action name, headers
+        ami_client.send_action(name, headers)
       end
 
       def handle_varset_ami_event(event)

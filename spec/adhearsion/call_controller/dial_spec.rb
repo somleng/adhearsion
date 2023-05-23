@@ -757,11 +757,11 @@ module Adhearsion
                   allow(other_mock_call).to receive(:unjoin)
                   allow(second_other_mock_call).to receive(:unjoin)
 
-                  expect(call).to receive(:join).once.ordered.with(mixer_name: mixer)
-                  expect(other_mock_call).to receive(:join).once.ordered.with(mixer_name: mixer)
+                  expect(call).to receive(:join).once.ordered.with(Hash(mixer_name: mixer))
+                  expect(other_mock_call).to receive(:join).once.ordered.with(Hash(mixer_name: mixer))
 
-                  expect(second_root_call).to receive(:join).once.ordered.with(mixer_name: mixer)
-                  expect(second_other_mock_call).to receive(:join).once.ordered.with(mixer_name: mixer)
+                  expect(second_root_call).to receive(:join).once.ordered.with(Hash(mixer_name: mixer))
+                  expect(second_other_mock_call).to receive(:join).once.ordered.with(Hash(mixer_name: mixer))
 
                   dial.merge other_dial
                 end
@@ -855,7 +855,7 @@ module Adhearsion
                 expect(latch.wait(2)).to be_falsey
 
                 [call, second_root_call, second_other_mock_call].each do |call|
-                  expect(call).to receive(:unjoin).once.with(mixer_name: mixer) do
+                  expect(call).to receive(:unjoin).once.with(Hash(mixer_name: mixer)) do
                     call << Adhearsion::Event::Unjoined.new(mixer_name: mixer)
                   end
                 end
@@ -863,7 +863,7 @@ module Adhearsion
                 dial.split
 
                 [call, other_mock_call, second_root_call, second_other_mock_call].each do |call|
-                  expect(call).to receive(:join).once.with(mixer_name: mixer) do
+                  expect(call).to receive(:join).once.with(Hash(mixer_name: mixer)) do
                     call << Adhearsion::Event::Joined.new(mixer_name: mixer)
                   end
                 end
